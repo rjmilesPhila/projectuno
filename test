@@ -1,0 +1,276 @@
+Sub Supervisor132()
+    Sub14
+    Sub16
+    Sub17
+End Sub
+
+Sub Sub14()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+       
+    Set ws = ThisWorkbook.Sheets("Employee List")
+   
+    lastRow = ws.Cells(ws.Rows.Count, "C").End(xlUp).Row
+   
+    For i = lastRow To 1 ' Start from the last row and loop upwards
+        If IsEmpty(ws.Cells(i, "C").Value) Then ' Check if cell in column C is empty
+            ws.Rows(i).Delete ' Delete the entire row
+        End If
+    Next i
+   
+    ws.Rows("1:2").Delete
+    ws.Columns("A:B").Delete
+    ws.Columns("I:M").Delete
+   
+    ' Delete the last row
+    ws.Rows(lastRow).Delete
+   
+    For i = lastRow To 1 Step -1
+        If Cells(i, 4).Value <> "5H06" And Cells(i, 4).Value <> "5H05" And Cells(i, 4).Value <> "5H07" And Cells(i, 4).Value <> "5H04" Then
+            Rows(i).Delete
+            
+            End If
+            Next i
+            
+     lastRow = ws.Cells(ws.Rows.Count, "D").End(xlUp).Row
+    For i = 1 To lastRow
+        If ws.Cells(i, "D").Value = "5H06" Or ws.Cells(i, "D").Value = "5H05" Or ws.Cells(i, "D").Value = "5H07" Then ws.Cells(i, "D").Value = "Supervisor"
+    If ws.Cells(i, "D").Value = "5H04" Then
+        ws.Cells(i, "D").Value = "Officer"
+        End If
+    Next i
+
+End Sub
+
+Sub Sub16()
+    Dim srcWorkbook As Workbook
+    Dim destWorkbook As Workbook
+    Dim srcSheet As Worksheet
+    Dim destSheet As Worksheet
+    Dim i As Long
+    Dim destRow As Long
+    Dim rank As String
+    Dim destsuperrow As Long
+    
+    
+   
+    Set srcWorkbook = ThisWorkbook
+    Set srcSheet = srcWorkbook.Sheets("Employee List")
+
+    Set destWorkbook = ThisWorkbook
+    Set destSheet = destWorkbook.Sheets("Officer Sheet") ' Fixed variable name 'officerSheet' to 'destSheet'
+    Set supervisorSheet = destWorkbook.Sheets("SuperTest")
+    
+  
+  
+    
+    
+    destRow = 9
+    destsuperrow = 1
+    For i = 1 To 10
+               If Not IsEmpty(srcSheet.Cells(i, 1).Value) Then
+         If srcSheet.Cells(i, 4).Value = "Officer" Then
+
+                srcSheet.Cells(i, 1).Copy Destination:=destSheet.Range("B" & destRow & ":B" & destRow)
+                srcSheet.Cells(i, 2).Copy Destination:=destSheet.Range("C" & destRow & ":D" & destRow)
+                srcSheet.Cells(i, 4).Copy Destination:=destSheet.Range("E" & destRow & ":F" & destRow)
+                srcSheet.Cells(i, 7).Copy Destination:=destSheet.Range("G" & destRow & ":H" & destRow)
+                destRow = destRow + 1
+                If destRow > 18 Then Exit For
+            Else
+                srcSheet.Cells(i, 1).Copy Destination:=supervisorSheet.Range("B" & destsuperrow & ":B" & destsuperrow)
+                srcSheet.Cells(i, 2).Copy Destination:=supervisorSheet.Range("C" & destsuperrow & ":D" & destsuperrow)
+                srcSheet.Cells(i, 4).Copy Destination:=supervisorSheet.Range("E" & destsuperrow & ":F" & destsuperrow)
+                srcSheet.Cells(i, 7).Copy Destination:=supervisorSheet.Range("G" & destsuperrow & ":H" & destsuperrow)
+                destsuperrow = destsuperrow + 1
+                If destsuperrow > 10 Then Exit For
+            End If
+        End If
+    Next i
+
+    destRow = 38
+    destsuperrow = 11
+    For i = 11 To 20
+               If Not IsEmpty(srcSheet.Cells(i, 1).Value) Then
+         If srcSheet.Cells(i, 4).Value = "Officer" Then
+
+                srcSheet.Cells(i, 1).Copy Destination:=destSheet.Range("B" & destRow & ":B" & destRow)
+                srcSheet.Cells(i, 2).Copy Destination:=destSheet.Range("C" & destRow & ":D" & destRow)
+                srcSheet.Cells(i, 4).Copy Destination:=destSheet.Range("E" & destRow & ":F" & destRow)
+                srcSheet.Cells(i, 7).Copy Destination:=destSheet.Range("G" & destRow & ":H" & destRow)
+                destRow = destRow + 1
+                If destRow > 47 Then Exit For
+            Else
+                srcSheet.Cells(i, 1).Copy Destination:=supervisorSheet.Range("B" & destsuperrow & ":B" & destsuperrow)
+                srcSheet.Cells(i, 2).Copy Destination:=supervisorSheet.Range("C" & destsuperrow & ":D" & destsuperrow)
+                srcSheet.Cells(i, 4).Copy Destination:=supervisorSheet.Range("E" & destsuperrow & ":F" & destsuperrow)
+                srcSheet.Cells(i, 7).Copy Destination:=supervisorSheet.Range("G" & destsuperrow & ":H" & destsuperrow)
+                destsuperrow = destsuperrow + 1
+                If destsuperrow > 20 Then Exit For
+            End If
+        End If
+    Next i
+
+  
+
+
+   
+    destRow = 68
+    destsuperrow = 21
+    For i = 21 To 30
+               If Not IsEmpty(srcSheet.Cells(i, 1).Value) Then
+         If srcSheet.Cells(i, 4).Value = "Officer" Then
+
+            srcSheet.Cells(i, 1).Copy Destination:=destSheet.Range("B" & destRow & ":B" & destRow)
+            srcSheet.Cells(i, 2).Copy Destination:=destSheet.Range("C" & destRow & ":D" & destRow)
+            srcSheet.Cells(i, 4).Copy Destination:=destSheet.Range("E" & destRow & ":F" & destRow)
+            srcSheet.Cells(i, 7).Copy Destination:=destSheet.Range("G" & destRow & ":H" & destRow)
+            destRow = destRow + 1
+           
+                If destRow > 77 Then Exit For
+                 Else
+            srcSheet.Cells(i, 1).Copy Destination:=supervisorSheet.Range("B" & destsuperrow & ":B" & destsuperrow)
+            srcSheet.Cells(i, 2).Copy Destination:=supervisorSheet.Range("C" & destsuperrow & ":D" & destsuperrow)
+            srcSheet.Cells(i, 4).Copy Destination:=supervisorSheet.Range("E" & destsuperrow & ":F" & destsuperrow)
+            srcSheet.Cells(i, 7).Copy Destination:=supervisorSheet.Range("G" & destsuperrow & ":H" & destsuperrow)
+            destsuperrow = destsuperrow + 1
+            If destsuperrow > 30 Then Exit For
+        End If
+    End If
+Next i
+   
+    destRow = 98
+    destsuperrow = 31
+    For i = 31 To 40
+              If Not IsEmpty(srcSheet.Cells(i, 1).Value) Then
+         If srcSheet.Cells(i, 4).Value = "Officer" Then
+
+            srcSheet.Cells(i, 1).Copy Destination:=destSheet.Range("B" & destRow & ":B" & destRow)
+            srcSheet.Cells(i, 2).Copy Destination:=destSheet.Range("C" & destRow & ":D" & destRow)
+            srcSheet.Cells(i, 4).Copy Destination:=destSheet.Range("E" & destRow & ":F" & destRow)
+            srcSheet.Cells(i, 7).Copy Destination:=destSheet.Range("G" & destRow & ":H" & destRow)
+            destRow = destRow + 1
+           
+                If destRow > 107 Then Exit For
+                 Else
+            srcSheet.Cells(i, 1).Copy Destination:=supervisorSheet.Range("B" & destsuperrow & ":B" & destsuperrow)
+            srcSheet.Cells(i, 2).Copy Destination:=supervisorSheet.Range("C" & destsuperrow & ":D" & destsuperrow)
+            srcSheet.Cells(i, 4).Copy Destination:=supervisorSheet.Range("E" & destsuperrow & ":F" & destsuperrow)
+            srcSheet.Cells(i, 7).Copy Destination:=supervisorSheet.Range("G" & destsuperrow & ":H" & destsuperrow)
+            destsuperrow = destsuperrow + 1
+              If destsuperrow > 40 Then Exit For
+        End If
+    End If
+Next i
+
+
+End Sub
+Sub Sub17()
+    Dim srcWorkbook As Workbook
+    Dim destWorkbook As Workbook
+    Dim srcSheet As Worksheet
+    Dim destSheet As Worksheet
+    Dim i As Long
+    Dim destRow As Long
+   
+    
+   
+    Set srcWorkbook = ThisWorkbook
+    Set srcSheet = srcWorkbook.Sheets("Supertest")
+
+    Set destWorkbook = ThisWorkbook
+    Set destSheet = destWorkbook.Sheets("Supervisor Sheet") ' Fixed variable name 'officerSheet' to 'destSheet'
+   
+   
+   
+    
+    
+
+    
+
+    destRow = 9
+    
+    For i = 1 To 10
+               If Not IsEmpty(srcSheet.Cells(i, 1).Value) Then
+         If srcSheet.Cells(i, 4).Value = "Supervisor" Then
+
+                srcSheet.Cells(i, 2).Copy Destination:=destSheet.Range("B" & destRow & ":B" & destRow)
+                srcSheet.Cells(i, 3).Copy Destination:=destSheet.Range("C" & destRow & ":D" & destRow)
+                srcSheet.Cells(i, 5).Copy Destination:=destSheet.Range("E" & destRow & ":F" & destRow)
+                srcSheet.Cells(i, 7).Copy Destination:=destSheet.Range("G" & destRow & ":H" & destRow)
+                destRow = destRow + 1
+                If destRow > 18 Then Exit For
+         
+            End If
+        End If
+    Next i
+
+    destRow = 38
+    For i = 11 To 20
+               If Not IsEmpty(srcSheet.Cells(i, 1).Value) Then
+         If srcSheet.Cells(i, 4).Value = "Supervisor" Then
+
+               srcSheet.Cells(i, 2).Copy Destination:=destSheet.Range("B" & destRow & ":B" & destRow)
+                srcSheet.Cells(i, 3).Copy Destination:=destSheet.Range("C" & destRow & ":D" & destRow)
+                srcSheet.Cells(i, 5).Copy Destination:=destSheet.Range("E" & destRow & ":F" & destRow)
+                srcSheet.Cells(i, 7).Copy Destination:=destSheet.Range("G" & destRow & ":H" & destRow)
+                destRow = destRow + 1
+                If destRow > 47 Then Exit For
+         
+            End If
+        End If
+    Next i
+
+   
+    destRow = 68
+ 
+    For i = 21 To 30
+               If Not IsEmpty(srcSheet.Cells(i, 1).Value) Then
+         If srcSheet.Cells(i, 4).Value = "Supervisor" Then
+
+           srcSheet.Cells(i, 2).Copy Destination:=destSheet.Range("B" & destRow & ":B" & destRow)
+                srcSheet.Cells(i, 3).Copy Destination:=destSheet.Range("C" & destRow & ":D" & destRow)
+                srcSheet.Cells(i, 5).Copy Destination:=destSheet.Range("E" & destRow & ":F" & destRow)
+                srcSheet.Cells(i, 7).Copy Destination:=destSheet.Range("G" & destRow & ":H" & destRow)
+                destRow = destRow + 1
+           
+                If destRow > 77 Then Exit For
+          
+        End If
+    End If
+Next i
+   
+    destRow = 98
+
+    For i = 31 To 40
+              If Not IsEmpty(srcSheet.Cells(i, 1).Value) Then
+         If srcSheet.Cells(i, 4).Value = "Supervisor" Then
+
+            srcSheet.Cells(i, 2).Copy Destination:=destSheet.Range("B" & destRow & ":B" & destRow)
+                srcSheet.Cells(i, 3).Copy Destination:=destSheet.Range("C" & destRow & ":D" & destRow)
+                srcSheet.Cells(i, 5).Copy Destination:=destSheet.Range("E" & destRow & ":F" & destRow)
+                srcSheet.Cells(i, 7).Copy Destination:=destSheet.Range("G" & destRow & ":H" & destRow)
+                destRow = destRow + 1
+           
+                If destRow > 107 Then Exit For
+            
+        End If
+    End If
+Next i
+
+
+End Sub
+
+Sub CopyCellValue(srcCell As Range, destRange As Range)
+    ' Copy value from srcCell to destRange, handling merged cells in destination range
+    Dim mergedArea As Range
+    If destRange.Cells.Count > 1 Then
+        ' Check if destination range contains merged cells
+        For Each mergedArea In destRange.MergeArea
+            ' Unmerge merged cells
+            mergedArea.MergeCells = False
+        Next mergedArea
+    End If
+    srcCell.Copy Destination:=destRange.Cells(1, 1)
+End Sub
