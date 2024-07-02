@@ -1,0 +1,5 @@
+Problem 4
+
+SELECT jailhouseview.ppn, jailhouseview.rname AS FirstName,  jailhouseview.lname AS LastName, jailhouseview.LID as IntakeNumber,  jailhouseview.sex AS Gender,jailhouseview.facility AS HousingLocation, jailhouseview.DOB AS Birthdate, (MONTHS_BETWEEN(SYSDATE, jailhouseview.DOB) / 12) AS age
+FROM  jailhouseview
+WHERE (MONTHS_BETWEEN(SYSDATE, jailhouseview.DOB) / 12) < 18
