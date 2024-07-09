@@ -1,0 +1,6 @@
+SELECT COUNT(*) sex
+
+FROM offenders
+WHERE sex IN ('M', 'F')
+
+GROUP BY sex
