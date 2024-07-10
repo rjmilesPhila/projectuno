@@ -1,0 +1,5 @@
+SELECT d.offender, COUNT(*) AS num_rows, MAX(d.bail) AS max_bail
+FROM Dockets d
+JOIN Jailhouseview j ON d.offender = j.offender
+GROUP BY d.offender
+HAVING COUNT(*) = SUM(CASE WHEN d.bail > 0 THEN 1 ELSE 0 END)
