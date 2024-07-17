@@ -1,0 +1,44 @@
+DECLARE @myDate AS datetime = '2024-06-30 00:00:00.000';
+
+SELECT 
+    fd.PPN,
+    fd.LNAME,
+    fd.RNAME,
+    fd.SEX,
+    fd.RACE,
+    fd.RELIGION,
+    fd.FACILITY,
+    fd.BLOCK,
+    fd.CELL,
+    fd.[Snapshot Date],
+    (SELECT COUNT(*) 
+     FROM REP_HOUSINGCHANGES H
+     INNER JOIN REP_OFFENDERS O ON H.OFFENDER = O.OFFENDER
+     INNER JOIN REP_ALIASES A ON H.OFFENDER = A.OFFENDER AND H.NAMETAG = A.NAMETAG
+     WHERE H.MOVEIN <= @myDate
+       AND (H.MOVEOUT = @myDate OR H.MOVEOUT IS NULL)
+       AND H.FACILITY NOT IN ('OC', 'OJ')
+    ) AS TotalCount
+FROM 
+    (SELECT 
+        O.PPN,
+        A.LNAME,
+        A.RNAME,
+        O.SEX,
+        O.RACE,
+        O.RELIGION,
+        H.FACILITY,
+        H.BLOCK,
+        H.CELL,
+        @myDate AS [Snapshot Date]
+    FROM 
+        REP_HOUSINGCHANGES H
+    INNER JOIN
+        REP_OFFENDERS O ON H.OFFENDER = O.OFFENDER
+    INNER JOIN
+        REP_ALIASES A ON H.OFFENDER = A.OFFENDER AND H.NAMETAG = A.NAMETAG
+    WHERE 
+        H.MOVEIN <= @myDate
+        AND (H.MOVEOUT = @myDate OR H.MOVEOUT IS NULL)
+        AND H.FACILITY NOT IN ('OC', 'OJ')
+    ) AS fd;
