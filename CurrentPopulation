@@ -1,0 +1,11 @@
+SELECT 
+  COUNT(OFFENDER) AS POPULATION
+  ,CAST(LOADTIME as Date) as [Date]
+FROM 
+  REP_JAILHOUSE
+WHERE
+  OFFENDER IS NOT NULL
+  AND FACILITY NOT IN ('OC','OJ')
+GROUP BY 
+  CAST(LOADTIME as Date);
+--Current Population as of loadtime
