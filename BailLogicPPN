@@ -1,0 +1,54 @@
+WITH NumberDockets AS (
+    SELECT 
+        d.Offender,
+        COUNT(d.bail) AS [Count Bail], 
+        MAX(d.bail) AS [Max Bail], 
+        MIN(d.bail) AS [Min Bail], 
+        SUM(d.bail) AS [Sum Bail], 
+        ROW_NUMBER() OVER (PARTITION BY d.offender ORDER BY d.offender) AS rn 
+    FROM 
+        rep_Dockets d
+    JOIN 
+        rep_Jailhouse j ON d.offender = j.offender
+    WHERE 
+        j.offender IS NOT NULL
+        AND j.FACILITY NOT IN ('OJ', 'OC')
+    GROUP BY 
+        d.offender
+    HAVING 
+        COUNT(*) = SUM(CASE WHEN d.bail > 0 THEN 1 ELSE 0 END)
+),
+UniqueAliases AS (
+    SELECT 
+        a.offender,
+        COUNT(*) AS [Alias Count], 
+        MAX(a.RNAME) AS [First Name], 
+        MAX(a.LNAME) AS [Last Name],
+        o.PPN
+    FROM 
+        REP_aliases a
+    JOIN 
+        REP_OFFENDERS o ON a.offender = o.OFFENDER
+    GROUP BY 
+        a.offender,
+        o.PPN
+)
+SELECT 
+    nd.Offender,
+	ua.PPN,
+    nd.[Min Bail],
+    nd.[Max Bail],
+    nd.[Sum Bail],
+	nd.[Count Bail],
+    ua.[First Name],
+    ua.[Last Name],
+    ua.[Alias Count]
+    
+FROM 
+    NumberDockets nd
+JOIN 
+    UniqueAliases ua ON nd.offender = ua.offender
+WHERE 
+    nd.rn = 1
+ORDER BY 
+    nd.[Sum Bail];
