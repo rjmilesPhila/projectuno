@@ -1,0 +1,52 @@
+WITH DurationGroups AS (
+    SELECT
+        COUNT(OFFENDER) AS [IP by Group],
+        CASE
+            WHEN STAY <= 30 THEN '30 days or less'
+            WHEN STAY BETWEEN 31 AND 60 THEN '31 - 60 days'
+            WHEN STAY BETWEEN 61 AND 90 THEN '61 - 90 days'
+            ELSE '91 or more days'
+        END AS [Duration In Custody]
+    FROM 
+        REP_JAILHOUSE JH
+    WHERE
+        OFFENDER IS NOT NULL
+        AND FACILITY NOT IN ('OC', 'OJ')
+    GROUP BY 
+        CASE
+            WHEN STAY <= 30 THEN '30 days or less'
+            WHEN STAY BETWEEN 31 AND 60 THEN '31 - 60 days'
+            WHEN STAY BETWEEN 61 AND 90 THEN '61 - 90 days'
+            ELSE '91 or more days'
+    END
+),
+TotalPopulation AS (
+    SELECT SUM([IP by Group]) AS [IP Population]
+    FROM DurationGroups
+),
+LatestLoadTime AS (
+    SELECT MAX(LoadTime) AS LatestLoadTime
+    FROM REP_JAILHOUSE
+),
+LastDayPreviousMonth AS (
+    SELECT DATEADD(DAY, -1, DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)) AS LastDayPreviousMonth
+)
+SELECT 
+    DG.[IP by Group],
+    DG.[Duration In Custody],
+    FORMAT(DG.[IP by Group] * 100.0 / TP.[IP Population], 'N2') AS [Percentage],
+    TP.[IP Population],
+    LT.LatestLoadTime AS LoadTime,
+    LP.LastDayPreviousMonth
+FROM 
+    DurationGroups DG
+    CROSS JOIN TotalPopulation TP
+    CROSS JOIN LatestLoadTime LT
+    CROSS JOIN LastDayPreviousMonth LP
+ORDER BY 
+    CASE DG.[Duration In Custody]
+        WHEN '30 days or less' THEN 1
+        WHEN '31 - 60 days' THEN 2
+        WHEN '61 - 90 days' THEN 3
+        ELSE 4
+    END;
