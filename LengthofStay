@@ -1,0 +1,38 @@
+SELECT 
+    v_AdmissionsAndReleases.OFFENDER, 
+    v_AdmissionsAndReleases.LID, 
+    v_AdmissionsAndReleases.Admission, 
+    v_AdmissionsAndReleases.Release, 
+    REP_OFFENDERS.NAMETAG, 
+    REP_OFFENDERS.RACE, 
+    REP_OFFENDERS.SEX, 
+    REP_ALIASES.DOB, 
+    DATEDIFF(YEAR, REP_ALIASES.DOB, GETDATE()) - CASE 
+        WHEN MONTH(REP_ALIASES.DOB) > MONTH(GETDATE()) 
+        OR (MONTH(REP_ALIASES.DOB) = MONTH(GETDATE()) AND DAY(REP_ALIASES.DOB) > DAY(GETDATE())) 
+        THEN 1 
+        ELSE 0 
+    END AS Age, 
+    v_AdmissionsAndReleases.MOCLASS, 
+    v_AdmissionsAndReleases.OUTSTATUS,
+    DATEDIFF(day, v_AdmissionsAndReleases.Admission, v_AdmissionsAndReleases.Release) AS Stay,
+    CASE
+        WHEN DATEDIFF(day, v_AdmissionsAndReleases.Admission, v_AdmissionsAndReleases.Release) = 0 THEN 'Same day'
+        WHEN DATEDIFF(day, v_AdmissionsAndReleases.Admission, v_AdmissionsAndReleases.Release) = 1 THEN 'Next day'
+        WHEN DATEDIFF(day, v_AdmissionsAndReleases.Admission, v_AdmissionsAndReleases.Release) <= 4 THEN '2 - 4 days'
+        WHEN DATEDIFF(day, v_AdmissionsAndReleases.Admission, v_AdmissionsAndReleases.Release) <= 14 THEN '5 - 14 days'
+        WHEN DATEDIFF(day, v_AdmissionsAndReleases.Admission, v_AdmissionsAndReleases.Release) <= 30 THEN '15 - 30 days'
+        WHEN DATEDIFF(day, v_AdmissionsAndReleases.Admission, v_AdmissionsAndReleases.Release) <= 60 THEN '31 - 60 days'
+        WHEN DATEDIFF(day, v_AdmissionsAndReleases.Admission, v_AdmissionsAndReleases.Release) <= 90 THEN '61 - 90 days'
+        ELSE 'Over 90 days'
+    END AS DurationCategory
+FROM 
+    v_AdmissionsAndReleases 
+INNER JOIN 
+    REP_OFFENDERS ON v_AdmissionsAndReleases.OFFENDER = REP_OFFENDERS.OFFENDER 
+INNER JOIN 
+    REP_ALIASES ON REP_OFFENDERS.NAMETAG = REP_ALIASES.NAMETAG AND REP_OFFENDERS.OFFENDER = REP_ALIASES.OFFENDER
+WHERE 
+    v_AdmissionsAndReleases.Release BETWEEN '2024-09-01' AND '2024-10-01'
+ORDER BY 
+    Age;
